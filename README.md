@@ -42,6 +42,44 @@
     ```
 
 ## SecretPage Part 2
-  * Create user model
+  * Create user model - you know how to do that!
   * Configure passport
-  
+    `  var passportLocalMongoose = require('passport-local-mongoose');` and `UserSchema.plugin(passportLocalMongoose);` will add a bunch of methods to our userSchema
+
+  ```
+      var mongoose = require('mongoose');
+      var passportLocalMongoose = require('passport-local-mongoose');
+
+      // schema set up
+      var userSchema = new mongoose.Schema({
+        username: String,
+        password: String
+      });
+
+      userSchema.plugin(passportLocalMongoose);
+
+      module.exports = mongoose.model('User', userSchema);
+  ```
+
+  *Let's connect all the packages that we installed!*
+  - We need this two lines anytime we use `passport`.
+  ```
+    app.use(passport.initialize());
+    app.use(passport.session());
+  ```
+  - next we'll require express-session
+  ```
+    var session = require('express-session')
+    app.use(session({
+      secret: 'this can be anything at all. These three are all required',
+      resave: false,
+      saveUnintialized: false
+    }));
+  ```
+
+  - These lines reads the session, taking the date from the session and are responsible for encoding and decoding.
+
+  ```
+    passport.serializeUser(User.serializeUser());
+    passport.deserializeUser(User.deserializeUser());
+  ```
