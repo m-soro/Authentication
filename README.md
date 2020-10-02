@@ -141,3 +141,28 @@
     }
   ```
   - our password is hashed and the salt property helps to unhash this password.
+
+## SecretPage Part 4
+  * Add Login form - you know how to do this!
+  * Add Login routes
+  ```
+      // RENDER LOG IN FORM
+      app.get('/login', function(req, res){
+        res.render('login');
+      });
+
+      // LOG IN LOGIC
+      // MIDDLEWARE - SITS BETWEEN THE BEGINNING AND BEFORE THE END OF THE ROUTE
+      // passport.authenticate - CHECKS THE CREDENTIALS. IT AUTHENTICATES
+      // WILL TAKE THE USERNAME AND PASSWORD INSIDE request.body THEN WE PROVIDE AN OBJECT
+      // WITH TWO OPTIONS: SUCCESS AND FAILURE
+      app.post('/login', passport.authenticate('local', {
+        successRedirect: '/secret',
+        failureRedirect: '/login'
+      }), function(req, res){
+
+      });
+  ```
+  - *don't forget to add* `passport.use(new LocalStrategy(User.authenticate()));`, we are telling passport to create a new local strategy, using the `User.authenticate()` coming from the `user.ejs` from `passportLocalMongoose`.
+
+  *Now if we try to sign in to an account that doesn't work, it wont take us to the log in page!*

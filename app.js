@@ -22,6 +22,7 @@ app.use(passport.session());
 app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
 
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -70,6 +71,24 @@ app.post('/register', function(req, res){
       res.redirect('/secret');
     });
   });
+});
+
+// LOGIN ROUTES
+// RENDER LOG IN FORM
+app.get('/login', function(req, res){
+  res.render('login');
+});
+
+// LOG IN LOGIC
+// MIDDLEWARE - SITS BETWEEN THE BEGINNING AND BEFORE THE END OF THE ROUTE
+// passport.authenticate - CHECKS THE CREDENTIALS. IT AUTHENTICATES
+// WILL TAKE THE USERNAME AND PASSWORD INSIDE request.body THEN WE PROVIDE AN OBJECT
+// WITH TWO OPTIONS: SUCCESS AND FAILURE
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/secret',
+  failureRedirect: '/login'
+}), function(req, res){
+
 });
 
 
