@@ -166,3 +166,31 @@
   - *don't forget to add* `passport.use(new LocalStrategy(User.authenticate()));`, we are telling passport to create a new local strategy, using the `User.authenticate()` coming from the `user.ejs` from `passportLocalMongoose`.
 
   *Now if we try to sign in to an account that doesn't work, it wont take us to the log in page!*
+
+## SecretPage Part 5
+  * Add Logout Route
+    - we added a log out link `<li><a href="/logout">LOG OUT!</a></li>`
+    *Now let's work on the route - very simple!*
+  ```
+    // LOG OUT ROUTE
+    app.get('/logout', function(req, res){
+      req.logout();
+      res.redirect('/');
+    });
+  ```
+
+  * Add isLoggedIn middleware
+  ```
+  function isLoggedIn(req, res, next){
+
+    // CHECK IF isAuthenticated (COMES WITH PASSPORT),
+    if(req.isAuthenticated()){
+
+      // IF YES, RUN THE NEXT STEP
+      return next();
+
+    } // IF NOT, REDIRECT TO LOGIN AGAIN
+    res.redirect('/login');
+  };
+  ```
+  *Then add this function to the secret page - page that needs authentication for access!*
